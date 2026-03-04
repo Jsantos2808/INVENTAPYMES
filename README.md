@@ -1,34 +1,33 @@
-# BriefFlow — Sistema de Elaboración de System Briefs para Equipos de Software
+# InventarioPYME — Sistema de Control de Inventario para Pequeñas y Medianas Empresas
 
-> Plataforma web colaborativa que guía a equipos de producto en la creación, validación y versionado de System Briefs estandarizados, reduciendo el tiempo de arranque de proyectos y las ambigüedades en el alcance.
+> Aplicación web para que PYMES lleven un control preciso de su inventario en tiempo real, registren movimientos de productos, reciban alertas de stock crítico y generen reportes de valorización sin depender de hojas de cálculo.
 
 ---
 
 ## Problema
 
-Los equipos de desarrollo arrancan proyectos sin una visión documentada y compartida. El System Brief —el documento que define el problema, stakeholders, scope y no-scope— se elabora de forma informal, en distintos formatos, sin validación de stakeholders y sin historial de cambios. Esto genera malentendidos de alcance, retrabajo costoso y proyectos que resuelven el problema equivocado.
+Las pequeñas y medianas empresas (tiendas, ferreterías, distribuidoras, minisupers) controlan su inventario con hojas de Excel o cuadernos físicos. Esta práctica genera quiebres de stock no detectados, discrepancias entre el inventario físico y el registrado, pérdidas no trazables y decisiones de reabastecimiento basadas en intuición en vez de datos reales.
 
 ## Solución
 
-**BriefFlow** es una herramienta web que provee plantillas estructuradas de System Brief, flujos de aprobación por stakeholders, historial de versiones y exportación a Markdown/PDF listos para GitHub, todo en un entorno colaborativo en tiempo real.
+**InventarioPYME** es un panel web accesible desde cualquier dispositivo donde el equipo puede registrar entradas y salidas de productos, configurar niveles de stock mínimo, recibir alertas automáticas por email y exportar reportes de valorización para contabilidad.
 
 ## Stakeholders
 
 | Rol | Interés principal |
 |-----|------------------|
-| Product Manager / Owner | Crear y versionar el System Brief del proyecto |
-| Tech Lead / Arquitecto | Validar scope técnico y restricciones del sistema |
-| Stakeholder de negocio | Aprobar el brief y confirmar que resuelve el problema correcto |
-| Desarrollador | Consultar el brief actualizado como referencia de alcance |
+| Dueño / Gerente de PYME | Visibilidad total del inventario y reportes para decisiones de compra |
+| Encargado de bodega | Registrar entradas y salidas de manera rápida y sin errores |
+| Encargado de compras | Saber qué productos están en nivel crítico y cuánto reabastecer |
+| Contador (externo) | Exportar reporte de valorización para estados financieros |
 
 ## Stack tecnológico (propuesto)
 
 - **Frontend:** React + TypeScript
 - **Backend:** Node.js + Express
 - **Base de datos:** PostgreSQL
-- **Colaboración en tiempo real:** WebSockets (Socket.io)
-- **Exportación:** jsPDF / remark (Markdown)
-- **Autenticación:** OAuth 2.0 (Google / GitHub)
+- **Notificaciones:** SendGrid (email)
+- **Exportación:** SheetJS (Excel) + jsPDF (PDF)
 
 ## Estructura del repositorio
 
@@ -36,11 +35,6 @@ Los equipos de desarrollo arrancan proyectos sin una visión documentada y compa
 /
 ├── README.md
 └── docs/
-    ├── system-brief.md     # Visión, alcance y diagrama de contexto Mermaid
-    └── requirements.md     # Backlog completo + GWT + MVP rationale
+    ├── system-brief.md     # Visión, alcance y diagrama de contexto (Mermaid)
+    └── requirements.md     # Backlog, historias de usuario y MVP rationale
 ```
-
-## Links
-
-- 📋 **Backlog (Trello):** https://trello.com/invite/b/69a79f46e1fc62b15e2d0254/ATTI32c04fb51686c553a23c3ffb2be2d8c5C54331E1/inventapyme
-- 🎬 **Video explicativo:** [Google Drive →](https://drive.google.com/TU_ENLACE)
