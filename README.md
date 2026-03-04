@@ -43,6 +43,4 @@ Los equipos de desarrollo arrancan proyectos sin una visión documentada y compa
 ## Links
 
 - 📋 **Backlog (Trello):** https://trello.com/invite/b/69a79f46e1fc62b15e2d0254/ATTI32c04fb51686c553a23c3ffb2be2d8c5C54331E1/inventapyme
-- 📄 **System Brief:** [docs/system-brief.md](docs/system-brief.md)
-- 📑 **Requirements & Backlog:** [docs/requirements.md](docs/requirements.md)
 - 🎬 **Video explicativo:** [Google Drive →](https://drive.google.com/TU_ENLACE)
