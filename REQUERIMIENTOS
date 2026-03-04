@@ -1,13 +1,13 @@
-# Requirements & Product Backlog — BriefFlow
+# Requirements & Product Backlog — InventarioPYME
 
 ## Backlog en Trello
 
-📋 **Tablero Trello — BriefFlow Backlog:**
-https://trello.com/invite/b/69a79f46e1fc62b15e2d0254/ATTI32c04fb51686c553a23c3ffb2be2d8c5C54331E1/inventapyme
+📋 **Tablero Trello — InventarioPYME Backlog:**
+[https://trello.com/b/TU_ENLACE/inventariopyme-backlog](https://trello.com/b/TU_ENLACE/inventariopyme-backlog)
 
 > El tablero contiene tres listas: **To Do / In Progress / Done**.
 > Cada tarjeta tiene etiqueta de prioridad MoSCoW (Must / Should / Could / Won't),
-> descripción de la historia y checklist con los criterios de aceptación.
+> descripción de la historia y checklist con sus criterios de aceptación.
 
 ---
 
@@ -15,95 +15,96 @@ https://trello.com/invite/b/69a79f46e1fc62b15e2d0254/ATTI32c04fb51686c553a23c3ff
 
 | # | Historia de Usuario | Prioridad |
 |---|---------------------|-----------|
-| US-01 | Como **Product Manager**, quiero registrarme con mi cuenta de Google o GitHub para acceder a la plataforma sin crear credenciales nuevas. | 🔴 Must |
-| US-02 | Como **Product Manager**, quiero crear un nuevo proyecto y completar su System Brief usando una plantilla guiada por secciones para no omitir información clave. | 🔴 Must |
-| US-03 | Como **Product Manager**, quiero enviar el System Brief a uno o más revisores para obtener su aprobación antes de iniciar el desarrollo. | 🔴 Must |
-| US-04 | Como **Tech Lead o Stakeholder**, quiero aprobar o rechazar el brief con un comentario para que el PM sepa si puede proceder o debe corregir algo. | 🔴 Must |
-| US-05 | Como **Product Manager**, quiero ver el historial de versiones del brief y comparar los cambios entre dos versiones para entender cómo evolucionó el alcance. | 🟡 Should |
-| US-06 | Como **revisor (Tech Lead / Stakeholder)**, quiero agregar comentarios inline en secciones específicas del brief para dar retroalimentación precisa sin usar email. | 🟡 Should |
-| US-07 | Como **Product Manager**, quiero exportar el brief aprobado a Markdown (compatible con GitHub) y a PDF para publicarlo en el repositorio del proyecto. | 🟡 Should |
-| US-08 | Como **desarrollador**, quiero ver en el dashboard el brief vigente y aprobado de mi proyecto para consultarlo como referencia de alcance durante el sprint. | 🟢 Could |
+| US-01 | Como **dueño**, quiero registrar mi empresa y crear cuentas de usuario para que mi equipo acceda al sistema con credenciales propias. | 🔴 Must |
+| US-02 | Como **encargado de bodega**, quiero registrar una entrada de inventario indicando producto, cantidad y proveedor para mantener el stock actualizado. | 🔴 Must |
+| US-03 | Como **encargado de bodega**, quiero registrar una salida de inventario indicando producto, cantidad y motivo (venta / merma / consumo) para reflejar el movimiento real. | 🔴 Must |
+| US-04 | Como **encargado de compras**, quiero recibir un email automático cuando un producto baje del stock mínimo configurado para reabastecerlo antes de que se agote. | 🔴 Must |
+| US-05 | Como **dueño**, quiero ver un dashboard con los KPIs del inventario (valor total, productos en nivel crítico, movimientos del día) para tomar decisiones rápidas. | 🟡 Should |
+| US-06 | Como **encargado de bodega**, quiero buscar y filtrar productos por nombre, SKU o categoría para encontrarlos y registrar movimientos más rápido. | 🟡 Should |
+| US-07 | Como **contador**, quiero exportar el reporte de valorización del inventario a Excel o PDF para integrarlo a los estados financieros sin trabajo manual. | 🟡 Should |
+| US-08 | Como **dueño**, quiero consultar el historial completo de movimientos filtrado por producto, fecha, tipo y usuario para auditar pérdidas o discrepancias. | 🟢 Could |
 
 ---
 
 ## Criterios de Aceptación — Historias Must con Given / When / Then
 
-### US-02 — Crear System Brief con plantilla guiada
+### US-02 — Registro de entrada de inventario
 
-**Descripción:** Como Product Manager, quiero crear un nuevo proyecto y completar su System Brief usando una plantilla guiada por secciones para no omitir información clave.
+**Descripción:** Como encargado de bodega, quiero registrar una entrada de inventario indicando producto, cantidad y proveedor para mantener el stock actualizado.
 
-#### Escenario 1 — Brief creado exitosamente con todas las secciones
-
-| | |
-|---|---|
-| **Given** | El PM está autenticado, en la pantalla "Nuevo Proyecto", y completa: nombre del sistema, sección Problema (mín. 50 caracteres), al menos 2 stakeholders, al menos 3 ítems de Scope IN y 2 de Scope OUT. |
-| **When** | Hace clic en "Guardar borrador". |
-| **Then** | El sistema crea el proyecto con estado "Borrador", guarda todas las secciones, lo muestra en el dashboard del PM y confirma con el mensaje "Brief guardado como borrador". |
-
-#### Escenario 2 — Intento de guardar con secciones obligatorias vacías
+#### Escenario 1 — Entrada registrada exitosamente
 
 | | |
 |---|---|
-| **Given** | El PM está en el formulario del brief y deja en blanco la sección "Problema". |
-| **When** | Hace clic en "Guardar borrador". |
-| **Then** | El sistema resalta en rojo la sección "Problema" con el mensaje "Esta sección es obligatoria" y no guarda el brief hasta que se complete. |
+| **Given** | El encargado de bodega está autenticado y accede al formulario "Nueva Entrada"; seleccionó un producto existente del catálogo, ingresó cantidad = 100 y el nombre del proveedor "Distribuidora XYZ". |
+| **When** | Hace clic en "Guardar entrada". |
+| **Then** | El sistema suma 100 unidades al stock actual del producto; registra el movimiento en el historial con fecha, hora, usuario y proveedor; actualiza el stock visible en el catálogo; y muestra el mensaje de confirmación "Entrada registrada correctamente". |
 
-#### Escenario 3 — Autoguardado mientras se edita
+#### Escenario 2 — Cantidad inválida (cero o negativa)
 
 | | |
 |---|---|
-| **Given** | El PM tiene un brief en edición y lleva más de 2 minutos sin guardar manualmente. |
-| **When** | El temporizador de autoguardado se activa. |
-| **Then** | El sistema guarda la versión en curso silenciosamente y muestra "Autoguardado hace unos segundos" en la barra superior, sin interrumpir la edición. |
+| **Given** | El encargado de bodega está en el formulario "Nueva Entrada" con un producto ya seleccionado. |
+| **When** | Ingresa cantidad = 0 o un valor negativo y hace clic en "Guardar". |
+| **Then** | El sistema muestra el error inline "La cantidad debe ser mayor a cero" junto al campo; el botón de guardar permanece inactivo; no se registra ningún movimiento ni se modifica el stock. |
+
+#### Escenario 3 — Producto no encontrado en el catálogo
+
+| | |
+|---|---|
+| **Given** | El encargado de bodega escribe un SKU que no existe en el catálogo dentro del campo de búsqueda del formulario. |
+| **When** | El sistema completa la búsqueda sin resultados. |
+| **Then** | El campo muestra el aviso "Producto no encontrado. ¿Deseas crearlo?" con un enlace al formulario de nuevo producto; el formulario de entrada no puede guardarse hasta que se seleccione un producto válido del catálogo. |
 
 #### Criterios adicionales
 
-- La plantilla tiene las secciones: Visión, Problema, Stakeholders, Scope IN, Scope OUT, Restricciones y KPIs.
-- Cada sección tiene texto de ayuda (placeholder) que desaparece al empezar a escribir.
-- El PM puede guardar el brief como borrador aunque no estén completas todas las secciones opcionales.
+- El campo cantidad acepta únicamente números enteros positivos; se bloquean letras y decimales.
+- El campo proveedor es opcional; si se omite, el movimiento se registra como "Sin proveedor especificado".
+- El tiempo de respuesta desde "Guardar" hasta la confirmación no debe superar los 3 segundos.
 
 ---
 
-### US-03 — Enviar brief a revisión y aprobación
+### US-04 — Alerta automática de stock mínimo
 
-**Descripción:** Como Product Manager, quiero enviar el System Brief a uno o más revisores para obtener su aprobación antes de iniciar el desarrollo.
+**Descripción:** Como encargado de compras, quiero recibir un email automático cuando un producto baje del stock mínimo configurado para reabastecerlo antes de que se agote.
 
-#### Escenario 1 — Envío a revisores exitoso
-
-| | |
-|---|---|
-| **Given** | El PM tiene un brief en estado "Borrador" con todas las secciones obligatorias completas; seleccionó 2 revisores registrados en la plataforma. |
-| **When** | Hace clic en "Enviar a revisión". |
-| **Then** | El brief cambia a estado "En revisión"; cada revisor recibe un email con asunto "Solicitud de revisión: [Nombre del proyecto]" y un enlace directo al brief; el PM ve en el dashboard el estado de aprobación de cada revisor (Pendiente / Aprobado / Rechazado). |
-
-#### Escenario 2 — Brief incompleto no puede enviarse
+#### Escenario 1 — Alerta enviada correctamente al alcanzar el mínimo
 
 | | |
 |---|---|
-| **Given** | El PM intenta enviar a revisión un brief que tiene la sección "Scope IN" vacía. |
-| **When** | Hace clic en "Enviar a revisión". |
-| **Then** | El sistema bloquea el envío, resalta la sección incompleta y muestra el aviso "Completa todas las secciones obligatorias antes de enviar a revisión". |
+| **Given** | El producto "Papel Bond A4 (resma)" tiene stock mínimo configurado en 20 unidades y stock actual = 22 unidades. |
+| **When** | Se registra una salida de 5 unidades, dejando el stock en 17 unidades. |
+| **Then** | El sistema envía automáticamente un email al encargado de compras con: nombre del producto, SKU, stock actual (17), stock mínimo (20) y enlace directo al producto; el producto aparece marcado en rojo en el dashboard de KPIs bajo "Productos en nivel crítico". |
 
-#### Escenario 3 — Todos los revisores aprueban
+#### Escenario 2 — La alerta no se duplica
 
 | | |
 |---|---|
-| **Given** | El brief tiene 2 revisores asignados y ambos hacen clic en "Aprobar". |
-| **When** | El segundo revisor confirma su aprobación. |
-| **Then** | El brief cambia automáticamente a estado "Aprobado"; el PM recibe un email de notificación "Tu brief ha sido aprobado"; el brief queda bloqueado para edición y se crea la versión v1.0 en el historial. |
+| **Given** | El producto "Papel Bond A4 (resma)" ya está en estado de alerta (stock < mínimo) y el email ya fue enviado. |
+| **When** | Se registra otra salida adicional que reduce aún más el stock. |
+| **Then** | El sistema NO envía un segundo email de alerta; la alerta queda registrada como activa en el sistema; se reactiva únicamente cuando el stock sube por encima del mínimo y vuelve a caer por debajo. |
+
+#### Escenario 3 — Producto sin stock mínimo configurado
+
+| | |
+|---|---|
+| **Given** | Un producto tiene el campo "stock mínimo" vacío o en cero dentro del catálogo. |
+| **When** | Su stock llega a 0 unidades tras una salida registrada. |
+| **Then** | El sistema NO envía alerta por email; muestra el producto con un indicador naranja "Sin mínimo configurado" en el dashboard para que el dueño lo configure. |
 
 #### Criterios adicionales
 
-- Se puede enviar a revisión con mínimo 1 revisor y máximo 5 revisores por brief.
-- Si un revisor rechaza el brief, su estado cambia a "Requiere correcciones" aunque otros hayan aprobado.
-- El email de notificación debe llegar en menos de 5 minutos desde el envío.
+- El email de alerta debe enviarse en un máximo de 5 minutos desde que se registra la salida que dispara el umbral.
+- El asunto del email debe incluir el nombre del producto y el texto "⚠️ Stock mínimo alcanzado — InventarioPYME".
+- El encargado de compras puede actualizar su dirección de email de alertas desde la sección "Perfil de usuario".
+- Las alertas pueden desactivarse por producto desde el catálogo sin necesidad de eliminar el stock mínimo.
 
 ---
 
 ## MVP Rationale
 
-Las cuatro historias **Must (US-01 a US-04)** conforman el ciclo de valor mínimo e indivisible de BriefFlow: sin autenticación (US-01) no hay usuarios; sin la creación guiada del brief (US-02) no existe el artefacto central del sistema; sin el flujo de envío a revisión (US-03) el brief nunca llega a los stakeholders; y sin la capacidad de aprobar o rechazar (US-04) no existe el cierre formal que le da al equipo la certeza de que el alcance fue validado.
+Las cuatro historias **Must (US-01 a US-04)** representan el ciclo mínimo de valor completo para una PYME: sin el registro de empresa y usuarios (US-01) no existe sistema ni acceso controlado; sin entradas (US-02) y salidas (US-03) el inventario nunca refleja la realidad del negocio; y sin alertas automáticas de stock mínimo (US-04) no se resuelve el problema central, los quiebres de stock silenciosos que generan ventas perdidas y clientes insatisfechos.
 
-Las historias **Should** (US-05, US-06, US-07) enriquecen el ciclo pero no lo bloquean: un equipo puede operar sin historial de versiones ni exportación en el primer sprint y aún así obtener el valor principal. La historia **Could** (US-08) responde a una necesidad real de los desarrolladores pero su ausencia no impide que PMs y stakeholders usen el flujo central de creación y aprobación.
+Las historias **Should** (US-05, US-06, US-07) elevan la experiencia operativa considerablemente, pero no bloquean la propuesta de valor: un equipo puede registrar movimientos y recibir alertas aunque no disponga de dashboard visual ni exportación a Excel en el Sprint 1. La historia **Could** (US-08) cubre una necesidad real de auditoría interna, pero su ausencia no impide el uso diario del sistema; se agenda para v1.1 una vez validado el núcleo con usuarios reales.
 
-En síntesis, el MVP responde a: *¿cuál es la versión más pequeña que permite a un PM crear un System Brief, enviarlo a aprobación y obtener una respuesta formal antes de iniciar el desarrollo?* La respuesta son exactamente esas cuatro historias Must.
+En síntesis, el MVP responde a: *¿cuál es la versión más pequeña del sistema que permite a una PYME reemplazar su hoja de Excel de inventario hoy mismo, saber cuándo un producto se agota antes de que ocurra y tener trazabilidad de cada movimiento?*
