@@ -1,0 +1,128 @@
+# System Brief — BriefFlow
+
+## 1. Visión del producto
+
+**BriefFlow** es una plataforma web colaborativa diseñada para equipos de producto y desarrollo que necesitan estandarizar la forma en que elaboran, aprueban y versionan sus System Briefs. El sistema provee plantillas estructuradas, flujos de aprobación por stakeholders, historial de versiones y exportación directa a Markdown y PDF listos para ser publicados en GitHub.
+
+**Objetivo de negocio:** Reducir en un 50 % el tiempo de arranque de proyectos software al eliminar la ambigüedad de alcance en las primeras dos semanas, y lograr que el 100 % de los proyectos del equipo inicien con un System Brief aprobado y versionado.
+
+---
+
+## 2. Problema
+
+| Síntoma | Impacto |
+|---------|---------|
+| El System Brief se elabora informalmente (emails, chats, reuniones sin acta) | El alcance queda ambiguo; cada miembro del equipo entiende algo distinto |
+| Sin plantilla estándar: cada proyecto usa un formato diferente | Tiempo perdido decidiendo estructura; briefs incompletos que omiten secciones clave |
+| Sin flujo de aprobación: el brief nunca es formalmente validado por stakeholders | Proyectos que resuelven el problema equivocado; cambios de alcance tardíos y costosos |
+| Sin historial de versiones del brief | Imposible saber qué cambió, cuándo y por qué; conflictos sobre la versión vigente |
+| Exportación manual a PDF/Markdown para GitHub | Inconsistencias de formato; documentación desactualizada respecto al brief real |
+
+---
+
+## 3. Stakeholders
+
+- **Product Manager / Owner:** quiere crear briefs con plantilla guiada, enviarlos a aprobación y exportarlos versionados.
+- **Tech Lead / Arquitecto:** quiere revisar y comentar el scope técnico antes de que se congele el brief.
+- **Stakeholder de negocio (cliente / sponsor):** quiere aprobar formalmente el brief y confirmar que el problema documentado es el correcto.
+- **Desarrollador:** quiere consultar el brief vigente como referencia de alcance durante el sprint.
+
+---
+
+## 4. Scope (IN) — MVP v1
+
+- ✅ Registro y autenticación de usuarios (Google / GitHub OAuth)
+- ✅ Creación de proyectos con System Brief usando plantilla estándar estructurada
+- ✅ Secciones guiadas: Problema, Stakeholders, Scope IN/OUT, Restricciones, KPIs
+- ✅ Flujo de aprobación: envío a revisores con estados Pendiente / Aprobado / Rechazado
+- ✅ Historial de versiones del brief con diff de cambios entre versiones
+- ✅ Comentarios por sección del brief (revisores pueden anotar inline)
+- ✅ Exportación del brief a Markdown (listo para GitHub) y a PDF
+- ✅ Dashboard de proyectos con estado del brief (Borrador / En revisión / Aprobado)
+
+## 5. No-Scope (OUT) — MVP v1
+
+- ❌ Gestión de backlog o historias de usuario (herramienta de PM completa)
+- ❌ Integración automática con Jira / GitHub Projects / Trello
+- ❌ Editor colaborativo en tiempo real simultáneo (tipo Google Docs)
+- ❌ Generación de diagramas Mermaid desde interfaz visual
+- ❌ Templates personalizados por empresa (solo plantilla estándar en v1)
+- ❌ Integración con Slack / Teams para notificaciones de aprobación
+- ❌ App móvil nativa (iOS / Android)
+
+---
+
+## 6. Diagrama de Contexto del Sistema
+
+```mermaid
+graph TB
+    subgraph Actores["👥 Actores Externos"]
+        PM([🗂️ Product Manager])
+        TL([⚙️ Tech Lead])
+        SK([💼 Stakeholder\nde Negocio])
+        DEV([👨‍💻 Desarrollador])
+    end
+
+    subgraph BriefFlow["🌐 BriefFlow — Plataforma Web"]
+        direction TB
+        AUTH[Autenticación\nOAuth 2.0]
+        EDITOR[Editor de\nSystem Brief]
+        APPROVAL[Flujo de\nAprobación]
+        VERSIONS[Control de\nVersiones]
+        COMMENTS[Comentarios\npor Sección]
+        EXPORT[Exportación\nMD / PDF]
+        DASH[Dashboard\nde Proyectos]
+    end
+
+    subgraph Externos["☁️ Servicios Externos"]
+        OAUTH["🔑 Google / GitHub\n(OAuth 2.0)"]
+        EMAIL["📧 SendGrid\n(Notificaciones)"]
+        DB[("🗄️ PostgreSQL\nBriefs & Versiones")]
+        STORAGE["📁 S3\n(PDFs exportados)"]
+    end
+
+    PM -->|Crear y editar brief| EDITOR
+    PM -->|Enviar a aprobación| APPROVAL
+    PM -->|Ver historial de cambios| VERSIONS
+    PM -->|Exportar a MD y PDF| EXPORT
+
+    TL -->|Comentar secciones técnicas| COMMENTS
+    TL -->|Aprobar o rechazar brief| APPROVAL
+
+    SK -->|Aprobar formalmente el brief| APPROVAL
+    SK -->|Ver brief vigente del proyecto| DASH
+
+    DEV -->|Consultar brief aprobado| DASH
+    DEV -->|Ver versión actual del scope| VERSIONS
+
+    AUTH --> OAUTH
+    APPROVAL --> EMAIL
+    EDITOR --> DB
+    VERSIONS --> DB
+    COMMENTS --> DB
+    APPROVAL --> DB
+    EXPORT --> STORAGE
+    DASH --> DB
+```
+
+---
+
+## 7. Restricciones y supuestos
+
+- Los usuarios deben tener cuenta Google o GitHub para autenticarse (no hay registro con email/contraseña en v1).
+- Un proyecto puede tener múltiples revisores pero un solo aprobador final designado (el stakeholder de negocio).
+- El brief se considera "congelado" una vez aprobado; nuevos cambios crean una versión nueva automáticamente.
+- Se soportan equipos de hasta 20 usuarios en el plan gratuito de v1.
+- El sistema debe ser accesible en desktop y tablet; la experiencia en móvil es de lectura, no de edición.
+
+---
+
+## 8. Métricas de éxito (KPIs)
+
+| KPI | Meta a 60 días |
+|-----|---------------|
+| Proyectos con brief aprobado antes de iniciar desarrollo | ≥ 90 % |
+| Tiempo promedio de creación + aprobación de un brief | < 3 días hábiles |
+| Reducción de cambios de alcance posteriores al brief | ≥ 50 % vs. línea base |
+| Revisores que completan su revisión en < 24h | ≥ 70 % |
+| Satisfacción del PM con la herramienta (CSAT) | ≥ 4.2 / 5.0 |
