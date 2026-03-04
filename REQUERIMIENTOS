@@ -1,0 +1,109 @@
+# Requirements & Product Backlog — BriefFlow
+
+## Backlog en Trello
+
+📋 **Tablero Trello — BriefFlow Backlog:**
+https://trello.com/invite/b/69a79f46e1fc62b15e2d0254/ATTI32c04fb51686c553a23c3ffb2be2d8c5C54331E1/inventapyme
+
+> El tablero contiene tres listas: **To Do / In Progress / Done**.
+> Cada tarjeta tiene etiqueta de prioridad MoSCoW (Must / Should / Could / Won't),
+> descripción de la historia y checklist con los criterios de aceptación.
+
+---
+
+## Historias de Usuario
+
+| # | Historia de Usuario | Prioridad |
+|---|---------------------|-----------|
+| US-01 | Como **Product Manager**, quiero registrarme con mi cuenta de Google o GitHub para acceder a la plataforma sin crear credenciales nuevas. | 🔴 Must |
+| US-02 | Como **Product Manager**, quiero crear un nuevo proyecto y completar su System Brief usando una plantilla guiada por secciones para no omitir información clave. | 🔴 Must |
+| US-03 | Como **Product Manager**, quiero enviar el System Brief a uno o más revisores para obtener su aprobación antes de iniciar el desarrollo. | 🔴 Must |
+| US-04 | Como **Tech Lead o Stakeholder**, quiero aprobar o rechazar el brief con un comentario para que el PM sepa si puede proceder o debe corregir algo. | 🔴 Must |
+| US-05 | Como **Product Manager**, quiero ver el historial de versiones del brief y comparar los cambios entre dos versiones para entender cómo evolucionó el alcance. | 🟡 Should |
+| US-06 | Como **revisor (Tech Lead / Stakeholder)**, quiero agregar comentarios inline en secciones específicas del brief para dar retroalimentación precisa sin usar email. | 🟡 Should |
+| US-07 | Como **Product Manager**, quiero exportar el brief aprobado a Markdown (compatible con GitHub) y a PDF para publicarlo en el repositorio del proyecto. | 🟡 Should |
+| US-08 | Como **desarrollador**, quiero ver en el dashboard el brief vigente y aprobado de mi proyecto para consultarlo como referencia de alcance durante el sprint. | 🟢 Could |
+
+---
+
+## Criterios de Aceptación — Historias Must con Given / When / Then
+
+### US-02 — Crear System Brief con plantilla guiada
+
+**Descripción:** Como Product Manager, quiero crear un nuevo proyecto y completar su System Brief usando una plantilla guiada por secciones para no omitir información clave.
+
+#### Escenario 1 — Brief creado exitosamente con todas las secciones
+
+| | |
+|---|---|
+| **Given** | El PM está autenticado, en la pantalla "Nuevo Proyecto", y completa: nombre del sistema, sección Problema (mín. 50 caracteres), al menos 2 stakeholders, al menos 3 ítems de Scope IN y 2 de Scope OUT. |
+| **When** | Hace clic en "Guardar borrador". |
+| **Then** | El sistema crea el proyecto con estado "Borrador", guarda todas las secciones, lo muestra en el dashboard del PM y confirma con el mensaje "Brief guardado como borrador". |
+
+#### Escenario 2 — Intento de guardar con secciones obligatorias vacías
+
+| | |
+|---|---|
+| **Given** | El PM está en el formulario del brief y deja en blanco la sección "Problema". |
+| **When** | Hace clic en "Guardar borrador". |
+| **Then** | El sistema resalta en rojo la sección "Problema" con el mensaje "Esta sección es obligatoria" y no guarda el brief hasta que se complete. |
+
+#### Escenario 3 — Autoguardado mientras se edita
+
+| | |
+|---|---|
+| **Given** | El PM tiene un brief en edición y lleva más de 2 minutos sin guardar manualmente. |
+| **When** | El temporizador de autoguardado se activa. |
+| **Then** | El sistema guarda la versión en curso silenciosamente y muestra "Autoguardado hace unos segundos" en la barra superior, sin interrumpir la edición. |
+
+#### Criterios adicionales
+
+- La plantilla tiene las secciones: Visión, Problema, Stakeholders, Scope IN, Scope OUT, Restricciones y KPIs.
+- Cada sección tiene texto de ayuda (placeholder) que desaparece al empezar a escribir.
+- El PM puede guardar el brief como borrador aunque no estén completas todas las secciones opcionales.
+
+---
+
+### US-03 — Enviar brief a revisión y aprobación
+
+**Descripción:** Como Product Manager, quiero enviar el System Brief a uno o más revisores para obtener su aprobación antes de iniciar el desarrollo.
+
+#### Escenario 1 — Envío a revisores exitoso
+
+| | |
+|---|---|
+| **Given** | El PM tiene un brief en estado "Borrador" con todas las secciones obligatorias completas; seleccionó 2 revisores registrados en la plataforma. |
+| **When** | Hace clic en "Enviar a revisión". |
+| **Then** | El brief cambia a estado "En revisión"; cada revisor recibe un email con asunto "Solicitud de revisión: [Nombre del proyecto]" y un enlace directo al brief; el PM ve en el dashboard el estado de aprobación de cada revisor (Pendiente / Aprobado / Rechazado). |
+
+#### Escenario 2 — Brief incompleto no puede enviarse
+
+| | |
+|---|---|
+| **Given** | El PM intenta enviar a revisión un brief que tiene la sección "Scope IN" vacía. |
+| **When** | Hace clic en "Enviar a revisión". |
+| **Then** | El sistema bloquea el envío, resalta la sección incompleta y muestra el aviso "Completa todas las secciones obligatorias antes de enviar a revisión". |
+
+#### Escenario 3 — Todos los revisores aprueban
+
+| | |
+|---|---|
+| **Given** | El brief tiene 2 revisores asignados y ambos hacen clic en "Aprobar". |
+| **When** | El segundo revisor confirma su aprobación. |
+| **Then** | El brief cambia automáticamente a estado "Aprobado"; el PM recibe un email de notificación "Tu brief ha sido aprobado"; el brief queda bloqueado para edición y se crea la versión v1.0 en el historial. |
+
+#### Criterios adicionales
+
+- Se puede enviar a revisión con mínimo 1 revisor y máximo 5 revisores por brief.
+- Si un revisor rechaza el brief, su estado cambia a "Requiere correcciones" aunque otros hayan aprobado.
+- El email de notificación debe llegar en menos de 5 minutos desde el envío.
+
+---
+
+## MVP Rationale
+
+Las cuatro historias **Must (US-01 a US-04)** conforman el ciclo de valor mínimo e indivisible de BriefFlow: sin autenticación (US-01) no hay usuarios; sin la creación guiada del brief (US-02) no existe el artefacto central del sistema; sin el flujo de envío a revisión (US-03) el brief nunca llega a los stakeholders; y sin la capacidad de aprobar o rechazar (US-04) no existe el cierre formal que le da al equipo la certeza de que el alcance fue validado.
+
+Las historias **Should** (US-05, US-06, US-07) enriquecen el ciclo pero no lo bloquean: un equipo puede operar sin historial de versiones ni exportación en el primer sprint y aún así obtener el valor principal. La historia **Could** (US-08) responde a una necesidad real de los desarrolladores pero su ausencia no impide que PMs y stakeholders usen el flujo central de creación y aprobación.
+
+En síntesis, el MVP responde a: *¿cuál es la versión más pequeña que permite a un PM crear un System Brief, enviarlo a aprobación y obtener una respuesta formal antes de iniciar el desarrollo?* La respuesta son exactamente esas cuatro historias Must.
