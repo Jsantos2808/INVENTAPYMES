@@ -1,10 +1,10 @@
-# System Brief — BriefFlow
+# System Brief — InventarioPYME
 
 ## 1. Visión del producto
 
-**BriefFlow** es una plataforma web colaborativa diseñada para equipos de producto y desarrollo que necesitan estandarizar la forma en que elaboran, aprueban y versionan sus System Briefs. El sistema provee plantillas estructuradas, flujos de aprobación por stakeholders, historial de versiones y exportación directa a Markdown y PDF listos para ser publicados en GitHub.
+**InventarioPYME** es una aplicación web diseñada para pequeñas y medianas empresas que necesitan abandonar el control manual de inventario y adoptar un sistema digital confiable, accesible y fácil de usar. Permite registrar movimientos de productos (entradas, salidas y ajustes), configurar alertas de stock mínimo por producto y obtener reportes exportables para toma de decisiones operativas y contables.
 
-**Objetivo de negocio:** Reducir en un 50 % el tiempo de arranque de proyectos software al eliminar la ambigüedad de alcance en las primeras dos semanas, y lograr que el 100 % de los proyectos del equipo inicien con un System Brief aprobado y versionado.
+**Objetivo de negocio:** Eliminar los quiebres de stock no detectados y reducir en un 60 % las discrepancias entre inventario físico y registrado en los primeros 60 días de uso, sin requerir capacitación técnica especializada por parte del equipo.
 
 ---
 
@@ -12,43 +12,45 @@
 
 | Síntoma | Impacto |
 |---------|---------|
-| El System Brief se elabora informalmente (emails, chats, reuniones sin acta) | El alcance queda ambiguo; cada miembro del equipo entiende algo distinto |
-| Sin plantilla estándar: cada proyecto usa un formato diferente | Tiempo perdido decidiendo estructura; briefs incompletos que omiten secciones clave |
-| Sin flujo de aprobación: el brief nunca es formalmente validado por stakeholders | Proyectos que resuelven el problema equivocado; cambios de alcance tardíos y costosos |
-| Sin historial de versiones del brief | Imposible saber qué cambió, cuándo y por qué; conflictos sobre la versión vigente |
-| Exportación manual a PDF/Markdown para GitHub | Inconsistencias de formato; documentación desactualizada respecto al brief real |
+| Inventario gestionado en hojas de cálculo sin control de versiones | Datos corruptos, múltiples archivos en conflicto, pérdida de información |
+| Sin alertas de stock mínimo configuradas | Quiebres de stock silenciosos que generan ventas perdidas y clientes insatisfechos |
+| Registro manual de entradas y salidas | Errores humanos, omisiones, inventario fantasma imposible de auditar |
+| Sin historial de movimientos trazable | Imposible identificar responsables de pérdidas, mermas o robos |
+| Reportes de valorización construidos manualmente | Horas de trabajo mensual para cuadrar inventario con contabilidad |
 
 ---
 
 ## 3. Stakeholders
 
-- **Product Manager / Owner:** quiere crear briefs con plantilla guiada, enviarlos a aprobación y exportarlos versionados.
-- **Tech Lead / Arquitecto:** quiere revisar y comentar el scope técnico antes de que se congele el brief.
-- **Stakeholder de negocio (cliente / sponsor):** quiere aprobar formalmente el brief y confirmar que el problema documentado es el correcto.
-- **Desarrollador:** quiere consultar el brief vigente como referencia de alcance durante el sprint.
+- **Dueño / Gerente:** quiere ver el estado actual del inventario y tomar decisiones de reabastecimiento con base en datos reales.
+- **Encargado de bodega:** quiere registrar entradas y salidas de forma rápida, desde cualquier dispositivo, sin cometer errores.
+- **Encargado de compras:** quiere recibir alertas a tiempo cuando un producto baja del mínimo configurado para evitar quiebres.
+- **Contador (externo):** quiere exportar el reporte de valorización del inventario para integrarlo directamente a los estados financieros.
 
 ---
 
 ## 4. Scope (IN) — MVP v1
 
-- ✅ Registro y autenticación de usuarios (Google / GitHub OAuth)
-- ✅ Creación de proyectos con System Brief usando plantilla estándar estructurada
-- ✅ Secciones guiadas: Problema, Stakeholders, Scope IN/OUT, Restricciones, KPIs
-- ✅ Flujo de aprobación: envío a revisores con estados Pendiente / Aprobado / Rechazado
-- ✅ Historial de versiones del brief con diff de cambios entre versiones
-- ✅ Comentarios por sección del brief (revisores pueden anotar inline)
-- ✅ Exportación del brief a Markdown (listo para GitHub) y a PDF
-- ✅ Dashboard de proyectos con estado del brief (Borrador / En revisión / Aprobado)
+- ✅ Registro y autenticación de usuarios por empresa (multi-usuario)
+- ✅ Catálogo de productos con SKU, nombre, categoría, unidad de medida, precio de costo y stock actual
+- ✅ Registro de entradas de inventario (recepciones de compra)
+- ✅ Registro de salidas de inventario (ventas, consumo interno, merma)
+- ✅ Configuración de stock mínimo por producto
+- ✅ Alertas automáticas por email cuando el stock cae por debajo del mínimo
+- ✅ Historial de movimientos filtrable por producto, fecha, tipo y usuario
+- ✅ Reporte de valorización de inventario exportable a Excel y PDF
+- ✅ Dashboard con KPIs: total SKUs, valor total del inventario, productos en nivel crítico
 
 ## 5. No-Scope (OUT) — MVP v1
 
-- ❌ Gestión de backlog o historias de usuario (herramienta de PM completa)
-- ❌ Integración automática con Jira / GitHub Projects / Trello
-- ❌ Editor colaborativo en tiempo real simultáneo (tipo Google Docs)
-- ❌ Generación de diagramas Mermaid desde interfaz visual
-- ❌ Templates personalizados por empresa (solo plantilla estándar en v1)
-- ❌ Integración con Slack / Teams para notificaciones de aprobación
-- ❌ App móvil nativa (iOS / Android)
+- ❌ Punto de venta (POS) integrado
+- ❌ Integración con sistemas contables externos (SAP, QuickBooks, Contpaqi)
+- ❌ Control de inventario multi-bodega / multi-sucursal
+- ❌ Gestión de órdenes de compra a proveedores
+- ❌ Lectura de código de barras / QR / RFID
+- ❌ Aplicación móvil nativa (iOS / Android)
+- ❌ Control de lotes y fechas de vencimiento
+- ❌ Multi-moneda o multi-idioma
 
 ---
 
@@ -57,63 +59,62 @@
 ```mermaid
 graph TB
     subgraph Actores["👥 Actores Externos"]
-        PM([🗂️ Product Manager])
-        TL([⚙️ Tech Lead])
-        SK([💼 Stakeholder\nde Negocio])
-        DEV([👨‍💻 Desarrollador])
+        DU([👔 Dueño / Gerente])
+        BO([📦 Encargado de Bodega])
+        CO([🛒 Encargado de Compras])
+        CT([📊 Contador Externo])
     end
 
-    subgraph BriefFlow["🌐 BriefFlow — Plataforma Web"]
+    subgraph InventarioPYME["🌐 InventarioPYME — Aplicación Web"]
         direction TB
-        AUTH[Autenticación\nOAuth 2.0]
-        EDITOR[Editor de\nSystem Brief]
-        APPROVAL[Flujo de\nAprobación]
-        VERSIONS[Control de\nVersiones]
-        COMMENTS[Comentarios\npor Sección]
-        EXPORT[Exportación\nMD / PDF]
-        DASH[Dashboard\nde Proyectos]
+        AUTH[Autenticación\nMulti-usuario]
+        CAT[Catálogo\nde Productos]
+        MOV[Registro de\nMovimientos]
+        ALERT[Motor de\nAlertas]
+        REPORT[Reportes &\nExportación]
+        DASH[Dashboard\nde KPIs]
     end
 
     subgraph Externos["☁️ Servicios Externos"]
-        OAUTH["🔑 Google / GitHub\n(OAuth 2.0)"]
-        EMAIL["📧 SendGrid\n(Notificaciones)"]
-        DB[("🗄️ PostgreSQL\nBriefs & Versiones")]
-        STORAGE["📁 S3\n(PDFs exportados)"]
+        EMAIL["📧 SendGrid\n(Alertas por email)"]
+        DB[("🗄️ PostgreSQL\nBase de datos")]
+        EXPORT["📁 Excel / PDF\n(Descarga directa)"]
     end
 
-    PM -->|Crear y editar brief| EDITOR
-    PM -->|Enviar a aprobación| APPROVAL
-    PM -->|Ver historial de cambios| VERSIONS
-    PM -->|Exportar a MD y PDF| EXPORT
+    DU -->|Ver dashboard y KPIs| DASH
+    DU -->|Configurar catálogo y stock mínimo| CAT
+    DU -->|Consultar reportes| REPORT
 
-    TL -->|Comentar secciones técnicas| COMMENTS
-    TL -->|Aprobar o rechazar brief| APPROVAL
+    BO -->|Registrar entradas de inventario| MOV
+    BO -->|Registrar salidas de inventario| MOV
+    BO -->|Consultar stock actual| CAT
 
-    SK -->|Aprobar formalmente el brief| APPROVAL
-    SK -->|Ver brief vigente del proyecto| DASH
+    CO -->|Recibir y gestionar alertas de stock bajo| ALERT
+    CO -->|Ver historial de movimientos| MOV
 
-    DEV -->|Consultar brief aprobado| DASH
-    DEV -->|Ver versión actual del scope| VERSIONS
+    CT -->|Descargar reporte de valorización| REPORT
 
-    AUTH --> OAUTH
-    APPROVAL --> EMAIL
-    EDITOR --> DB
-    VERSIONS --> DB
-    COMMENTS --> DB
-    APPROVAL --> DB
-    EXPORT --> STORAGE
+    MOV -->|Actualiza stock| CAT
+    CAT -->|Dispara alerta si stock < mínimo| ALERT
+    ALERT -->|Envía notificación| EMAIL
+    MOV --> DB
+    CAT --> DB
+    REPORT --> DB
+    REPORT -->|Genera archivo| EXPORT
     DASH --> DB
+    AUTH --> DB
 ```
 
 ---
 
 ## 7. Restricciones y supuestos
 
-- Los usuarios deben tener cuenta Google o GitHub para autenticarse (no hay registro con email/contraseña en v1).
-- Un proyecto puede tener múltiples revisores pero un solo aprobador final designado (el stakeholder de negocio).
-- El brief se considera "congelado" una vez aprobado; nuevos cambios crean una versión nueva automáticamente.
-- Se soportan equipos de hasta 20 usuarios en el plan gratuito de v1.
-- El sistema debe ser accesible en desktop y tablet; la experiencia en móvil es de lectura, no de edición.
+- La empresa tiene acceso a internet estable; no se requiere instalación de software local.
+- Cada empresa opera en un espacio de datos aislado (arquitectura multi-tenant).
+- La interfaz debe ser responsiva y usable desde tablet o móvil, especialmente para el bodeguero.
+- El catálogo soporta hasta 5,000 SKUs activos en v1 sin degradación de rendimiento.
+- Los precios de costo se manejan en moneda local única; no hay conversión de divisas en v1.
+- Los usuarios con rol "empleado" no pueden modificar el catálogo ni exportar reportes financieros.
 
 ---
 
@@ -121,8 +122,9 @@ graph TB
 
 | KPI | Meta a 60 días |
 |-----|---------------|
-| Proyectos con brief aprobado antes de iniciar desarrollo | ≥ 90 % |
-| Tiempo promedio de creación + aprobación de un brief | < 3 días hábiles |
-| Reducción de cambios de alcance posteriores al brief | ≥ 50 % vs. línea base |
-| Revisores que completan su revisión en < 24h | ≥ 70 % |
-| Satisfacción del PM con la herramienta (CSAT) | ≥ 4.2 / 5.0 |
+| Reducción de quiebres de stock no detectados | ≥ 60 % vs. línea base |
+| Tiempo promedio de registro de un movimiento | < 30 segundos |
+| Discrepancias inventario físico vs. sistema | < 2 % mensual |
+| Adopción del equipo (usuarios activos / semana) | ≥ 80 % del equipo registrado |
+| Tiempo para generar reporte de valorización | < 10 segundos |
+| Alertas de stock mínimo recibidas a tiempo | ≥ 95 % en menos de 5 minutos |
